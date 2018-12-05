@@ -2,6 +2,9 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
+
+	"beego-api-example/database"
+	"beego-api-example/models"
 )
 
 // SeedController operations for Seed
@@ -53,7 +56,15 @@ func (c *SeedController) GetOne() {
 // @Failure 403
 // @router / [get]
 func (c *SeedController) GetAll() {
+	var seeds models.Seeds
 
+	session := database.MgoSession.Copy()
+	defer session.Close()
+	coll := session.DB("farmingo").C("seed")
+	coll.Find(nil).Sort("name").All(&seeds)
+
+	c.Data["json"] = seeds
+	c.ServeJSON()
 }
 
 // Put ...
