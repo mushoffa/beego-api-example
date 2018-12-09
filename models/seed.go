@@ -19,7 +19,9 @@ type Seed struct {
 	ImgUrl		string 			`json:"imgUrl" bson:"imgUrl"`
 }
 
-type Seeds []Seed
+// type Seeds struct {
+// 	Seedss []Seed
+// }
 
 // func init() {
 // 	orm.RegisterModel(new(Seed))
