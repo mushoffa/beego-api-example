@@ -2,12 +2,11 @@ package controllers
 
 import (
 	"encoding/json"
-	_ "reflect"
 	"github.com/astaxie/beego"
 	mgo "gopkg.in/mgo.v2"
 
-	mongodb "beego-api-example/pkg/database/mongo"
 	"beego-api-example/models"
+	mongodb "beego-api-example/pkg/database/mongo"
 	repository "beego-api-example/pkg/database/repository"
 )
 
@@ -41,16 +40,6 @@ func SeedRepository() *repository.SeedRepository {
 	)
 }
 
-// func NewSeedDbService() *database.DatabaseService {
-// 	return database.NewDatabaseService(
-// 		mongodb.NewMongoRepository(
-// 			mongodb.MongoSession.Copy(),
-// 			"farmingo",
-// 			"seed",
-// 		),
-// 	)
-// }
-
 // Post ...
 // @Title Create
 // @Description create Seed
@@ -74,20 +63,6 @@ func (c *SeedController) Post() {
 	} else {
 		c.Data["json"] = seed
 	}
-
-	// if err != nil {
-	// 	c.Data["json"] = err.Error()
-	// } else {
-	// 	seed.Id = bson.NewObjectId()
-	// 	session := database.MgoSession.Copy()
-	// 	defer session.Close()
-	// 	coll := session.DB("farmingo").C("seed")
-	// 	err = coll.Insert(&seed)
-
-	// 	if err != nil {
-	// 		c.Data["json"]  = err.Error()
-	// 	}
-	// }
 
 	c.ServeJSON()
 }
