@@ -6,5 +6,5 @@ import (
 
 type Database struct {
 	Name 	string
-	Session	*mgo.Session
+	Session *mgo.Session
 }

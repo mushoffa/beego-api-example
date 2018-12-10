@@ -3,11 +3,17 @@ package controllers
 import (
 	"encoding/json"
 	"github.com/astaxie/beego"
+	_ "github.com/astaxie/beego/validation"
 	mgo "gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
+	// log "github.com/sirupsen/logrus"
+
 
 	"beego-api-example/models"
+	"beego-api-example/pkg/database"
+	// service "beego-api-example/pkg/database/service"
 	mongodb "beego-api-example/pkg/database/mongo"
-	repository "beego-api-example/pkg/database/repository"
+	// repository "beego-api-example/pkg/database/repository"
 )
 
 // SeedController operations for Seed
@@ -24,7 +30,25 @@ func (c *SeedController) URLMapping() {
 	c.Mapping("Delete", c.Delete)
 }
 
-func SeedRepository() *repository.SeedRepository {
+// func SeedRepository() *service.SeedService {
+// 	mongodb_host := beego.AppConfig.String("mongodb.url")
+// 	//session, _ := mongodb.NewMongoDbSession(mongodb_host)
+// 	session, _ := mgo.Dial(mongodb_host)
+
+// 	db := &mongodb.Database{
+// 		Name: "farmingo",
+// 		Session: session,
+// 	}
+
+// 	repo := mongodb.NewMongoRepository(
+// 				db,
+// 				"seed",
+// 			)
+
+// 	return service.NewSeedService(repo)
+// }
+
+func SeedService() *database.Service {
 	mongodb_host := beego.AppConfig.String("mongodb.url")
 	//session, _ := mongodb.NewMongoDbSession(mongodb_host)
 	session, _ := mgo.Dial(mongodb_host)
@@ -34,10 +58,12 @@ func SeedRepository() *repository.SeedRepository {
 		Session: session,
 	}
 
-	return repository.NewSeedRepository(
-		db,
-		"seed",
-	)
+	repo := mongodb.NewMongoRepository(
+				db,
+				"seed",
+			)
+
+	return database.NewService(repo)
 }
 
 // Post ...
@@ -50,11 +76,13 @@ func SeedRepository() *repository.SeedRepository {
 // @router / [post]
 func (c *SeedController) Post() {
 	var seed models.Seed
-	// var err error
 	
 	json.Unmarshal(c.Ctx.Input.RequestBody, &seed)
-	repo := SeedRepository()
-	defer repo.DB.Session.Close()
+
+	repo := SeedService()
+	defer repo.CloseSession()
+
+	seed.Id = bson.NewObjectId()
 
 	_, err := repo.Insert(&seed)
 
@@ -75,7 +103,19 @@ func (c *SeedController) Post() {
 // @Failure 403 :id is empty
 // @router /:id [get]
 func (c *SeedController) GetOne() {
+	seedId := c.Ctx.Input.Param(":id")
+	repo := SeedService()
+	defer repo.CloseSession()
 
+	res, err := repo.FindById(seedId)
+
+	if err != nil {
+		c.Data["json"] = err.Error()
+	} else {
+		c.Data["json"] = res
+	}
+
+	c.ServeJSON()
 }
 
 // GetAll ...
@@ -92,18 +132,8 @@ func (c *SeedController) GetOne() {
 // @router / [get]
 func (c *SeedController) GetAll() {
 
-	//var res []*models.Seed
-	// var err error
-	// session := database.MgoSession.Copy()
-	// defer session.Close()
-	// coll := session.DB("farmingo").C("seed")
-	// coll.Find(nil).Sort("name").All(&seeds)
-	// s := NewSeedDbService()
-	// seeds := reflect.TypeOf(([]models.Seed)(nil))
-	// seeds := []models.Seed{}
-	// data, err := s.FindAll()
-	repo := SeedRepository()
-	defer repo.DB.Session.Close()
+	repo := SeedService()
+	defer repo.CloseSession()
 	res, err := repo.FindAll()
 
 	if err != nil {
@@ -111,7 +141,6 @@ func (c *SeedController) GetAll() {
 	} else {
 		c.Data["json"] = res	
 	}
-
 
 	c.ServeJSON()
 }
@@ -137,8 +166,8 @@ func (c *SeedController) Put() {
 // @router /:id [delete]
 func (c *SeedController) Delete() {
 	seedId := c.Ctx.Input.Param(":id")
-	repo := SeedRepository()
-	defer repo.DB.Session.Close()
+	repo := SeedService()
+	defer repo.CloseSession()
 
 	err := repo.RemoveById(seedId)
 

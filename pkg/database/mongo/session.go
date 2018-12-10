@@ -6,24 +6,9 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// var MgoSession *mgo.Session
-
 type Session struct {
 	session *mgo.Session
 }
-
-// func init() {
-// 	mongodb_host := beego.AppConfig.String("mongodb.url")
-// 	session, err := mgo.Dial(mongodb_host)
-
-// 	if err != nil {
-// 		log.Fatal(err.Error())
-// 	}
-
-// 	log.Info("Successfully connected to mongodb driver at ", mongodb_host)
-
-// 	MgoSession =  session
-// }
 
 func NewMongoDbSession(mongodb_url string) (*Session, error) {
 	session, err := mgo.Dial(mongodb_url)

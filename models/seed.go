@@ -6,22 +6,25 @@ import (
 	// "reflect"
 	// "strings"
 
-	"gopkg.in/mgo.v2/bson"
+	// "github.com/astaxie/beego/validation"
 	// "github.com/astaxie/beego/orm"
+
+	// "beego-api-example/pkg/database"
+	"gopkg.in/mgo.v2/bson"
 )
 
 type Seed struct {
-	Id   		bson.ObjectId	`json:"id" bson:"_id"`
-	Name 		string 			`json:"name" bson:"name`
-	Variety		string			`json:"variety" bson:"variety"`
-	Brand		string 			`json:"brand" bson:"brand"`
-	Country		string 			`json:"country" bson:"country"`
-	ImgUrl		string 			`json:"imgUrl" bson:"imgUrl"`
+	Id   		bson.ObjectId 	`json:"id" 		bson:"_id"`
+	Name 		string 			`json:"name" 	bson:"name 		valid:"Required;MinSize(4)"`
+	Variety		string			`json:"variety" bson:"variety" 	valid:"Required;MinSize(4)"`
+	Brand		string 			`json:"brand" 	bson:"brand" 	valid:"Required;MinSize(5)"`
+	Country		string 			`json:"country" bson:"country" 	valid:"Required;MinSize(5)"`
+	ImgUrl		string 			`json:"imgUrl" 	bson:"imgUrl" `
 }
 
-// type Seeds struct {
-// 	Seedss []Seed
-// }
+type Seeds struct {
+	Seeds []Seed
+}
 
 // func init() {
 // 	orm.RegisterModel(new(Seed))
