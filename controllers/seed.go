@@ -2,18 +2,14 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/astaxie/beego"
-	_ "github.com/astaxie/beego/validation"
-	mgo "gopkg.in/mgo.v2"
-	// "gopkg.in/mgo.v2/bson"
-	// log "github.com/sirupsen/logrus"
-
 
 	"beego-api-example/models"
 	"beego-api-example/pkg/database"
-	// service "beego-api-example/pkg/database/service"
-	mongodb "beego-api-example/pkg/database/mongo"
-	// repository "beego-api-example/pkg/database/repository"
+	"beego-api-example/pkg/database/config"
+	mongodb "beego-api-example/pkg/database/mongo"	
+
+	"github.com/astaxie/beego"
+	_ "github.com/astaxie/beego/validation"
 )
 
 // SeedController operations for Seed
@@ -30,40 +26,8 @@ func (c *SeedController) URLMapping() {
 	c.Mapping("Delete", c.Delete)
 }
 
-// func SeedRepository() *service.SeedService {
-// 	mongodb_host := beego.AppConfig.String("mongodb.url")
-// 	//session, _ := mongodb.NewMongoDbSession(mongodb_host)
-// 	session, _ := mgo.Dial(mongodb_host)
-
-// 	db := &mongodb.Database{
-// 		Name: "farmingo",
-// 		Session: session,
-// 	}
-
-// 	repo := mongodb.NewMongoRepository(
-// 				db,
-// 				"seed",
-// 			)
-
-// 	return service.NewSeedService(repo)
-// }
-
 func SeedService() *database.Service {
-	mongodb_host := beego.AppConfig.String("mongodb.url")
-	//session, _ := mongodb.NewMongoDbSession(mongodb_host)
-	session, _ := mgo.Dial(mongodb_host)
-
-	db := &mongodb.Database{
-		Name: "farmingo",
-		Session: session,
-	}
-
-	repo := mongodb.NewMongoRepository(
-				db,
-				"seed",
-			)
-
-	return database.NewService(repo)
+	return database.NewService(mongodb.NewMongoRepository(mongodb.MongoSession, config.SEED))
 }
 
 // Post ...
@@ -154,7 +118,8 @@ func (c *SeedController) GetAll() {
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *SeedController) Put() {
-
+	c.Data["json"] = "Work In Progress"
+	c.ServeJSON()
 }
 
 // Delete ...

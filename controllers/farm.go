@@ -3,16 +3,16 @@ package controllers
 import (
 	// "reflect"
 	"strconv"
+
 	"beego-api-example/models"
-	// "beego-api-example/pkg/database"
-	service "beego-api-example/pkg/database/service"
+	
+	"beego-api-example/pkg/database/config"
 	mongodb "beego-api-example/pkg/database/mongo"
+	service "beego-api-example/pkg/database/service"
+	
 
 	"github.com/astaxie/beego"
 	"github.com/json-iterator/go"
-	// log "github.com/sirupsen/logrus"
-	mgo "gopkg.in/mgo.v2"
-	// "gopkg.in/mgo.v2/bson"
 )
 
 //  FarmController operations for Farm
@@ -31,20 +31,10 @@ func (c *FarmController) URLMapping() {
 }
 
 func NewFarmService() *service.FarmService {
-	mongodb_host := beego.AppConfig.String("mongodb.url")
-	session, _ := mgo.Dial(mongodb_host)
-
-	db := &mongodb.Database {
-		Name: "farmingo",
-		Session: session,
-	}
-
-	repo := mongodb.NewMongoRepository(
-			db,
-			"farm",
+	return service.NewFarmService(
+			mongodb.NewMongoRepository(mongodb.MongoSession, config.FARM),
+			mongodb.MongoSession.Session,
 		)
-
-	return service.NewFarmService(repo, session.Copy())
 }
 
 // Post ...
@@ -82,18 +72,19 @@ func (c *FarmController) Post() {
 // @Failure 403 :id is empty
 // @router /:id [get]
 func (c *FarmController) GetOne() {
-
+	c.Data["json"] = "Work In Progress"
+	c.ServeJSON()
 }
 
 // GetAll ...
-// @Title Get All
+// @Title Get list of farms from database
 // @Description get Farm
-// @Param	query	query	string	false	"Filter. e.g. col1:v1,col2:v2 ..."
-// @Param	fields	query	string	false	"Fields returned. e.g. col1,col2 ..."
-// @Param	sortby	query	string	false	"Sorted-by fields. e.g. col1,col2 ..."
-// @Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
-// @Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
-// @Param	offset	query	string	false	"Start position of result set. Must be an integer"
+// Param	query	query	string	false	"Filter. e.g. col1:v1,col2:v2 ..."
+// Param	fields	query	string	false	"Fields returned. e.g. col1,col2 ..."
+// Param	sortby	query	string	false	"Sorted-by fields. e.g. col1,col2 ..."
+// Param	order	query	string	false	"Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ..."
+// Param	limit	query	string	false	"Limit the size of result set. Must be an integer"
+// Param	offset	query	string	false	"Start position of result set. Must be an integer"
 // @Success 200 {object} models.Farm
 // @Failure 403
 // @router / [get]
@@ -120,7 +111,8 @@ func (c *FarmController) GetAll() {
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *FarmController) Put() {
-
+	c.Data["json"] = "Work In Progress"
+	c.ServeJSON()
 }
 
 // Delete ...
@@ -131,7 +123,8 @@ func (c *FarmController) Put() {
 // @Failure 403 id is empty
 // @router /:id [delete]
 func (c *FarmController) Delete() {
-
+	c.Data["json"] = "Work In Progress"
+	c.ServeJSON()
 }
 
 

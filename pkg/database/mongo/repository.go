@@ -13,7 +13,8 @@ type MongoRepository struct {
 }
 
 func NewMongoRepository(db *Database, collection string) *MongoRepository {
-	c := db.Session.DB(db.Name).C(collection)
+	session := db.Session.Copy()
+	c := session.DB(db.Name).C(collection)
 	return &MongoRepository {
 		DB: db,
 		collection: c,
