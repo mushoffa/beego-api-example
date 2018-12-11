@@ -11,14 +11,18 @@ import (
 )
 
 type Farm struct {
-	Id   		bson.ObjectId 	`json:"id"			bson:"_id"`
-	Name 		string 			`json:"name"		bson:"name"`
-	Location	GeoPoint		`json:"location"	bson:"location"`
+	ID   		bson.ObjectId 	`json:"id,omitempty" bson:"_id,omitempty" mapstructure:"id"`
+	Name 		string 			`json:"name" bson:"name" mapstructure:"name"`
+	Location 	Location 		`json:"location" bson:"location" mapstructure:"location"`
+	// Location 	struct {
+	// 	Latitude	float64		`json:"latitude"		bson:"latitude"			mapstructure:"latitude"`
+	// 	Longitude	float64		`json:"longitude"		bson:"longitude"		mapstructure:"longitude"`
+	// } 							`json:"location"		bson:"location"			mapstructure:"location"`
 }
 
-type GeoPoint struct {
-	latitude	float64			`json:"latitude"	bson:"latitude"`
-	longitude	float64			`json:"longitude"	bson:"longitude"`
+type Location struct {
+	Latitude	float64			`json:"latitude" bson:"latitude" mapstructure:"latitude"`
+	Longitude	float64			`json:"longitude" bson:"longitude" mapstructure:"longitude"`
 }
 
 type Farms struct {

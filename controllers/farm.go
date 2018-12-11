@@ -1,9 +1,18 @@
 package controllers
 
 import (
-	_ "beego-api-example/models"
+	// "reflect"
+	"strconv"
+	"beego-api-example/models"
+	// "beego-api-example/pkg/database"
+	service "beego-api-example/pkg/database/service"
+	mongodb "beego-api-example/pkg/database/mongo"
 
 	"github.com/astaxie/beego"
+	"github.com/json-iterator/go"
+	// log "github.com/sirupsen/logrus"
+	mgo "gopkg.in/mgo.v2"
+	// "gopkg.in/mgo.v2/bson"
 )
 
 //  FarmController operations for Farm
@@ -21,15 +30,48 @@ func (c *FarmController) URLMapping() {
 	c.Mapping("Nearby", c.Nearby)
 }
 
+func NewFarmService() *service.FarmService {
+	mongodb_host := beego.AppConfig.String("mongodb.url")
+	session, _ := mgo.Dial(mongodb_host)
+
+	db := &mongodb.Database {
+		Name: "farmingo",
+		Session: session,
+	}
+
+	repo := mongodb.NewMongoRepository(
+			db,
+			"farm",
+		)
+
+	return service.NewFarmService(repo, session.Copy())
+}
+
 // Post ...
 // @Title Post
 // @Description create Farm
-// @Param	body		body 	models.Farm	true		"body for Farm content"
+// @Param	body		body 	models.Farm	false		"body for Farm content"
 // @Success 201 {int} models.Farm
 // @Failure 403 body is empty
 // @router / [post]
 func (c *FarmController) Post() {
+	var farm models.Farm
+	var json = jsoniter.ConfigCompatibleWithStandardLibrary
+	
+	json.Unmarshal(c.Ctx.Input.RequestBody, &farm)
 
+	r := NewFarmService()
+	defer r.CloseSession()
+
+	_, err := r.Insert(farm)
+
+	if err != nil {
+		c.Data["json"] = err.Error()
+	} else {
+		c.Data["json"] = farm
+	}
+
+	c.ServeJSON()
 }
 
 // GetOne ...
@@ -56,7 +98,17 @@ func (c *FarmController) GetOne() {
 // @Failure 403
 // @router / [get]
 func (c *FarmController) GetAll() {
-	
+	repo := NewFarmService()
+	defer repo.CloseSession()
+	res, err := repo.FindAll()
+
+	if err != nil {
+		c.Data["json"] = err.Error()
+	} else {
+		c.Data["json"] = res
+	}
+
+	c.ServeJSON()
 }
 
 // Put ...
@@ -85,13 +137,24 @@ func (c *FarmController) Delete() {
 
 // @Title Nearby
 // @Description Finds nearby farm location from current user location
-// @Param	latitude	path	float64	true	"latitude"
-// @Param	longitude	path	float64 true	"longitude"
-// @Param	radius		path	number	true	"Search radius (in meter)"
+// @Param	latitude	query	float64	true	"latitude"
+// @Param	longitude	query	float64 true	"longitude"
+// @Param	radius		query	number	true	"Search radius (in meter)"
 // @Success 200 {object} models.Farm
 // @Failure 403 no nearby farms
-// @router /nearby [post]
+// @router /nearby [get]
 func (c *FarmController) Nearby() {
-	c.Data["json"] = "OK"
+
+	latitude, _ := strconv.ParseFloat(c.GetString("latitude"), 64)
+	longitude, _ := strconv.ParseFloat(c.GetString("longitude"), 64)
+	radius, _ := strconv.ParseFloat(c.GetString("radius"), 64)
+
+	repo := NewFarmService()
+	defer repo.CloseSession()
+
+	res := repo.Nearby(latitude, longitude, radius)
+
+	c.Data["json"] = res
+	c.Data["json"] = "Work In Progress"
 	c.ServeJSON()
 }

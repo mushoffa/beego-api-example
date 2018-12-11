@@ -14,12 +14,12 @@ import (
 )
 
 type Seed struct {
-	Id   		bson.ObjectId 	`json:"id" 		bson:"_id"`
-	Name 		string 			`json:"name" 	bson:"name 		valid:"Required;MinSize(4)"`
-	Variety		string			`json:"variety" bson:"variety" 	valid:"Required;MinSize(4)"`
-	Brand		string 			`json:"brand" 	bson:"brand" 	valid:"Required;MinSize(5)"`
-	Country		string 			`json:"country" bson:"country" 	valid:"Required;MinSize(5)"`
-	ImgUrl		string 			`json:"imgUrl" 	bson:"imgUrl" `
+	ID   		bson.ObjectId 	`json:"id,omitempty" bson:"_id,omitempty"`
+	Name 		string 			`json:"name" bson:"name" valid:"Required;MinSize(4)"`
+	Variety		string			`json:"variety"	bson:"variety" valid:"Required;MinSize(4)"`
+	Brand		string 			`json:"brand" bson:"brand" valid:"Required;MinSize(5)"`
+	Country		string 			`json:"country"	bson:"country" valid:"Required;MinSize(5)"`
+	ImgUrl		string 			`json:"imgUrl" bson:"imgUrl"`
 }
 
 type Seeds struct {

@@ -5,7 +5,7 @@ import (
 	"github.com/astaxie/beego"
 	_ "github.com/astaxie/beego/validation"
 	mgo "gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
+	// "gopkg.in/mgo.v2/bson"
 	// log "github.com/sirupsen/logrus"
 
 
@@ -82,7 +82,7 @@ func (c *SeedController) Post() {
 	repo := SeedService()
 	defer repo.CloseSession()
 
-	seed.Id = bson.NewObjectId()
+	// seed.Id = bson.NewObjectId()
 
 	_, err := repo.Insert(&seed)
 

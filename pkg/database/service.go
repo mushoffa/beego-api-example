@@ -15,6 +15,10 @@ func NewService(r RepositoryHandler) *Service {
 		}
 }
 
+func (s *Service) Find(model interface{}) (interface{}) {
+	return s.r.Find(model)
+}
+
 func (s *Service) FindAll() (interface{}, error) {
 	return s.r.FindAll() 
 }

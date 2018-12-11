@@ -83,7 +83,6 @@
                         "in": "body",
                         "name": "body",
                         "description": "body for Farm content",
-                        "required": true,
                         "schema": {
                             "$ref": "#/definitions/models.Farm"
                         }
@@ -100,7 +99,7 @@
             }
         },
         "/farm/nearby": {
-            "post": {
+            "get": {
                 "tags": [
                     "farm"
                 ],
@@ -108,7 +107,7 @@
                 "operationId": "FarmController.Nearby",
                 "parameters": [
                     {
-                        "in": "path",
+                        "in": "query",
                         "name": "latitude",
                         "description": "latitude",
                         "required": true,
@@ -116,7 +115,7 @@
                         "format": "double"
                     },
                     {
-                        "in": "path",
+                        "in": "query",
                         "name": "longitude",
                         "description": "longitude",
                         "required": true,
@@ -124,7 +123,7 @@
                         "format": "double"
                     },
                     {
-                        "in": "path",
+                        "in": "query",
                         "name": "radius",
                         "description": "Search radius (in meter)",
                         "required": true,
@@ -699,15 +698,15 @@
                     "$ref": "#/definitions/bson.ObjectId"
                 },
                 "location": {
-                    "$ref": "#/definitions/models.GeoPoint"
+                    "$ref": "#/definitions/models.Location"
                 },
                 "name": {
                     "type": "string"
                 }
             }
         },
-        "models.GeoPoint": {
-            "title": "GeoPoint",
+        "models.Location": {
+            "title": "Location",
             "type": "object",
             "properties": {
                 "latitude": {

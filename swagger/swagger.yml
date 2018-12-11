@@ -59,7 +59,6 @@ paths:
       - in: body
         name: body
         description: body for Farm content
-        required: true
         schema:
           $ref: '#/definitions/models.Farm'
       responses:
@@ -127,25 +126,25 @@ paths:
         "403":
           description: id is empty
   /farm/nearby:
-    post:
+    get:
       tags:
       - farm
       description: Finds nearby farm location from current user location
       operationId: FarmController.Nearby
       parameters:
-      - in: path
+      - in: query
         name: latitude
         description: latitude
         required: true
         type: number
         format: double
-      - in: path
+      - in: query
         name: longitude
         description: longitude
         required: true
         type: number
         format: double
-      - in: path
+      - in: query
         name: radius
         description: Search radius (in meter)
         required: true
@@ -466,11 +465,11 @@ definitions:
       id:
         $ref: '#/definitions/bson.ObjectId'
       location:
-        $ref: '#/definitions/models.GeoPoint'
+        $ref: '#/definitions/models.Location'
       name:
         type: string
-  models.GeoPoint:
-    title: GeoPoint
+  models.Location:
+    title: Location
     type: object
     properties:
       latitude:

@@ -56,7 +56,7 @@ func init() {
         beego.ControllerComments{
             Method: "Nearby",
             Router: `/nearby`,
-            AllowHTTPMethods: []string{"post"},
+            AllowHTTPMethods: []string{"get"},
             MethodParams: param.Make(),
             Filters: nil,
             Params: nil})
