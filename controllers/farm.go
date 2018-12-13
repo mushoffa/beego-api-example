@@ -40,6 +40,7 @@ func NewFarmService() *service.FarmService {
 // Post ...
 // @Title Post
 // @Description create Farm
+// @Security Bearer
 // @Param	body		body 	models.Farm	false		"body for Farm content"
 // @Success 201 {int} models.Farm
 // @Failure 403 body is empty

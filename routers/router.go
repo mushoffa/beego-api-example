@@ -2,6 +2,7 @@
 // @Title Beego API Example
 // @Description beego has a very cool tools to autogenerate documents for your API
 // @Contact ridwan.mushoffa@gmail.com
+// @SecurityDefinition accessToken apiKey Authorization header "Access token key"
 // @TermsOfServiceUrl http://beego.me/
 // @License Apache 2.0
 // @LicenseUrl http://www.apache.org/licenses/LICENSE-2.0.html

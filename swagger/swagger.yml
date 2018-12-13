@@ -40,6 +40,8 @@ paths:
           description: '{int} models.Farm'
         "403":
           description: body is empty
+      security:
+      - Bearer: []
   /farm/{id}:
     get:
       tags:
@@ -504,6 +506,12 @@ definitions:
         $ref: '#/definitions/models.Profile'
       Username:
         type: string
+securityDefinitions:
+  accessToken:
+    type: apiKey
+    description: Access token key
+    name: Authorization
+    in: header
 tags:
 - name: object
   description: |

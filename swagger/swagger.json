@@ -57,7 +57,12 @@
                     "403": {
                         "description": "body is empty"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
             }
         },
         "/farm/nearby": {
@@ -757,6 +762,14 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "accessToken": {
+            "type": "apiKey",
+            "description": "Access token key",
+            "name": "Authorization",
+            "in": "header"
         }
     },
     "tags": [
